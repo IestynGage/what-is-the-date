@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+const App = (props) => {
 
   const [month, setMonth] = useState(Math.floor(Math.random() * 12));
   const months = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
   const [answer, setAnswer] = useState('');
   const [output, setOutput] = useState(<p></p>)
 
-  function selectRandomMonth() {
+  const selectRandomMonth = () => {
     let randomMonth = Math.floor(Math.random() * 12);
     
     setMonth(randomMonth);
   }
 
-  function checkAnswer() {
+  const checkAnswer = (event) => {
+    event.preventDefault() 
     if (answer.toLowerCase() === months[(month+1)%12].toLowerCase()) {
       console.log('correct')
       setAnswer('');
@@ -23,18 +24,34 @@ function App() {
     } else {
       setOutput( <p> Incorrent answer, try again</p>)
     }
-
+    return false;
   }
 
-  function onChange(event){
+  const onChange = (event) => {
     setAnswer(event.target.value);
   }
 
   return (
     <div>
-      <p> What month is after {months[month]}? </p>
-      <input type="text" value={answer} onChange={onChange}></input>
-      <button onClick={() => checkAnswer()}>Check</button>
+      <h3> What month is after {months[month]}? </h3>
+      <form onSubmit={checkAnswer}>
+        <input type='text' value={answer} onChange={onChange} list='months'></input>
+        <datalist id='months'>
+          <option value="January"/>
+          <option value="Feburary"/>
+          <option value="March"/>
+          <option value="April"/>
+          <option value="May"/>
+          <option value="June"/>
+          <option value="July"/>
+          <option value="August"/>
+          <option value="September"/>
+          <option value="October"/>
+          <option value="November"/>
+          <option value="December"/>
+        </datalist>
+        <button type="submit">Check</button>
+      </form>
       {output}
     </div>
   );
